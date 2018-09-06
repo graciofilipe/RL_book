@@ -24,3 +24,47 @@
 #occur in real problems and cannot easily be handled by optimization methods other than
 #dynamic programming. To check your program, first replicate the results given for the
 #original problem.
+
+from exercise_47.car_business_class import CarBusiness
+from exercise_47.car_business_agent_class import CarBusinessAgent
+from exercise_47.poliy_evaluator_class import PolicyEvaluator
+from exercise_47.poliy_improver_class import PolicyImprover
+
+
+
+import cProfile, pstats, io
+pr = cProfile.Profile()
+pr.enable()
+
+import numpy as np
+
+cb = CarBusiness(rental_profit=10,
+                 transport_cost=2,
+                 lambda_requests_0=3,
+                 lambda_requests_1=4,
+                 lambda_returns_0=3,
+                 lambda_returns_1=2,
+                 initial_state=(10,10))
+
+cba = CarBusinessAgent()
+pol_eval = PolicyEvaluator(gama=0.9)
+#prob=0
+#for i in range(30):
+#    for j in range(30):
+#        x = cb.get_probabilities_and_rewards(action=0,
+#                                             end_state=(i,j))
+#        prob += np.sum(x[0])
+#print(prob)
+
+updated_env = pol_eval.run_policy_evaluation(environment=cb,
+                                             agent=cba,
+                                             termination_tol=1)
+
+####
+pr.disable()
+s = io.StringIO()
+ps = pstats.Stats(pr, stream=s)
+pr.print_stats(sort="cumtime")
+print(s.getvalue())
+
+print(updated_env.state_value_dict.items())
