@@ -36,7 +36,12 @@ class CarBusiness:
     def set_state(self, new_state):
         self.state = new_state
 
-
+    def get_state_after_action(self, action):
+        state = self.get_state()
+        tmp_state_0 = state[0] - action
+        tmp_state_1 = state[1] + action
+        new_state = (min(max(tmp_state_0, 0), 19), min(max(tmp_state_1, 0), 19))
+        return new_state
 
     def get_all_possible_states(self):
         return self.state_value_dict.keys()

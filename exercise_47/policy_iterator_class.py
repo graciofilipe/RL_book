@@ -21,6 +21,4 @@ class PolicyIterator:
             else:
                 print('I changed the policy')
 
-
-
         return environment, agent
