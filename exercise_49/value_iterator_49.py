@@ -32,7 +32,7 @@ class ValueIterator:
                         pre_value = sum([probabilities[i] * rewards[i] for i in range(len(probabilities))])
                         pre_value += sum(probabilities) * self.gama * environment.get_value_of_state(end_state)
                         action_value += pre_value
-                        print('state:', state, 'action', action, 'end_state:', end_state, 'pre_value', pre_value)
+                        #print('state:', state, 'action', action, 'end_state:', end_state, 'pre_value', pre_value)
                     action_values.append(action_value)
                 best_action = possible_actions[np.argmax(action_values)]
                 state_value = max(action_values)
@@ -47,9 +47,9 @@ class ValueIterator:
                 dif = max(dif, pre_diff)
 
                 #print('changed policy for', state, 'from', current_action, 'to', best_action)
-                print('current dif', dif)
+            print('current dif', dif)
 
-                if dif < self.termination_tol:
-                    keep_going = False
+            if dif < self.termination_tol:
+                keep_going = False
 
         return environment, agent
