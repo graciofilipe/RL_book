@@ -1,5 +1,8 @@
+from numpy import random
+from exercise_512.episode_simulator import EpisodeSimulator
+
 class MonteCarloOffPolicyEstimator:
-    def __init__(self, agent, environment, q_dict,  episode_simulator):
+    def __init__(self, agent, environment, q_dict):
         self.agent = agent
         self.environment = environment
         self.episode_simulator = episode_simulator
@@ -22,5 +25,13 @@ class MonteCarloOffPolicyEstimator:
             behavior_policy = self.policy.copy()
 
             # generate episode
+            episode_simulator = EpisodeSimulator(agent=self.agent, environment=self.environment)
+
+            random_start_state = self.environment.starting_locations[random.choice(len(self.environment.starting_locations))]
+            state_action, rewards = self.episode_simulator.run_episode(start_state=random_start_state)
+            episode_len = len(state_action)
+            for t in range(episode_len-1, -1, -1):
+
+
 
 

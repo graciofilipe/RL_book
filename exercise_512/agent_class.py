@@ -11,7 +11,7 @@ class DriverAgent:
     def return_action(self, state):
         r = random.uniform()
         if r < self.epsilon:
-            return random.choice(a=self.possible_actions)
+            return self.possible_actions[random.choice(len(self.possible_actions))]
         else:
             return self.policy_dict[state]
 
