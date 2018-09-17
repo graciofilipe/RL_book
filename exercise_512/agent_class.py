@@ -15,6 +15,9 @@ class DriverAgent:
         else:
             return self.policy_dict[state]
 
+    def set_new_policy(self, new_policy):
+        self.policy_dict = new_policy
+
     def change_policy(self, state, new_action):
         self.policy_dict[state] = new_action
 
