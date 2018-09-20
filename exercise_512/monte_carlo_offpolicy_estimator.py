@@ -6,11 +6,10 @@ class MonteCarloOffPolicyEstimator:
     def __init__(self, agent, environment, q_dict):
         self.agent = agent
         self.environment = environment
-        self.state_action_counter = {state: 0 for state in q_dict.keys()}
+        self.c_dict = {state: 0 for state in q_dict.keys()}
         self.q_dict = q_dict
         self.policy = {}
         self.infer_policy_from_q()
-        print('infered policy')
         print(self.policy)
 
         # infer policy from the q_function
@@ -47,17 +46,18 @@ class MonteCarloOffPolicyEstimator:
             episode_simulator = EpisodeSimulator(agent=self.agent, environment=self.environment)
             random_start_location = self.environment.starting_locations[random.choice(len(self.environment.starting_locations))]
             start_state = (random_start_location, (0, 0))
-            state_action, rewards = episode_simulator.run_episode(start_state=start_state)
-            episode_len = len(state_action)
+            state_action_list, rewards_list = episode_simulator.run_episode(start_state=start_state)
+            episode_len = len(state_action_list)
             for t in range(episode_len-1, -1, -1):
-                g = g*gama* + rewards[t]
-                c_dict[state_action[t]] = c_dict.get(state_action, 0) + w
-                q_dict[state_action[t]] += (w/c_dict[state_action[t]])*(g - q_dict[state_action[t]])
-                new_action = self.get_best_action_for_state_from_Q(q_dict, state_action[0])
-                self.agent.change_policy(state=state_action[0], new_action=new_action)
+                print(t)
+                g = g*gama* + rewards_list[t]
+                self.c_dict[state_action_list[t]] = self.c_dict.get(state_action_list[t], 0) + w
+                self.q_dict[state_action_list[t]] += (w/self.c_dict[state_action_list[t]])*(g - self.q_dict[state_action_list[t]])
+                new_action = self.get_best_action_for_state_from_Q(self.q_dict, state_action_list[t][0])
+                self.agent.change_policy(state=state_action_list[t][0], new_action=new_action)
                 self.policy = self.agent.policy_dict
 
-                if new_action != state_action[1]:
+                if new_action != state_action_list[t][1]:
                     break
                 else:
                     w=w*(1/1)

@@ -49,7 +49,8 @@ def create_random_q_dict_from_env_and_agent(agent, all_possible_states):
 
 simple_track, driver, all_possible_states = create_envioronment_agent_and_states()
 
-initial_q_dict = create_random_q_dict_from_env_and_agent(agent=driver, all_possible_states=all_possible_states)
+initial_q_dict = create_random_q_dict_from_env_and_agent(agent=driver,
+                                                         all_possible_states=all_possible_states)
 
 
 policy_estimator = MonteCarloOffPolicyEstimator(agent=driver,

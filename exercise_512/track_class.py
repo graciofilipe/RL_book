@@ -31,14 +31,10 @@ class Track:
         self.state = (location, self.get_speed())
 
     def set_speed(self, speed):
-        print('speed setting', speed)
         self.state = (self.get_location(), speed)
 
     def update_state_with_action(self, action):
         speed = self.get_speed()
-        print(' xxxx ')
-        print('speed', speed)
-        print('action', action)
         new_speed_0, new_speed_1 = max(0, min(speed[0] + action[0], self.max_speed)),\
                                    max(0, min(speed[1] + action[1], self.max_speed))
         self.set_speed((new_speed_0, new_speed_1))
