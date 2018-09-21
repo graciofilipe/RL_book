@@ -9,7 +9,7 @@ class Track:
         '''
         random.choice(3)
         self.starting_locations = start_locations
-        self.end_states = end_locations
+        self.end_locations = end_locations
         self.state = initial_state
         self.grid = grid
         self.max_speed = max_speed
@@ -44,7 +44,7 @@ class Track:
         location = self.get_location()
         new_location = (location[0]+speed[0], location[1]+speed[1])
 
-        if new_location in self.end_states:
+        if new_location in self.end_locations:
             return 0
         else:
             if new_location not in self.grid:

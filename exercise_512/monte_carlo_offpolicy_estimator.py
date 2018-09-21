@@ -12,7 +12,7 @@ class MonteCarloOffPolicyEstimator:
         self.infer_policy_from_q()
         print(self.policy)
 
-        # infer policy from the q_function
+    # infer policy from the q_function
     def infer_policy_from_q(self):
         state_val = {}
         for state_action_tuple, q_val in self.q_dict.items():
@@ -36,7 +36,7 @@ class MonteCarloOffPolicyEstimator:
 
 
     def estimate_policy(self, gama, max_iter):
-        for _ in range(max_iter):
+        for iter in range(max_iter):
             behavior_policy = self.policy.copy()
             self.agent.set_new_policy(new_policy = behavior_policy)
 
@@ -49,7 +49,6 @@ class MonteCarloOffPolicyEstimator:
             state_action_list, rewards_list = episode_simulator.run_episode(start_state=start_state)
             episode_len = len(state_action_list)
             for t in range(episode_len-1, -1, -1):
-                print(t)
                 g = g*gama* + rewards_list[t]
                 self.c_dict[state_action_list[t]] = self.c_dict.get(state_action_list[t], 0) + w
                 self.q_dict[state_action_list[t]] += (w/self.c_dict[state_action_list[t]])*(g - self.q_dict[state_action_list[t]])
@@ -60,6 +59,7 @@ class MonteCarloOffPolicyEstimator:
                 if new_action != state_action_list[t][1]:
                     break
                 else:
+                    print('I was here')
                     w=w*(1/1)
         return self.agent.policy_dict
 
