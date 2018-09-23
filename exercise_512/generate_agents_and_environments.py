@@ -11,7 +11,6 @@ def create_envioronment_agent_and_states():
     for x in range(grid_width):
         for y in range(grid_height):
             grid.append((x, y))
-    print('len grid', len(grid))
 
     start_locations = [(1, 0)]
     end_locations = [(2, 2)]
@@ -20,7 +19,6 @@ def create_envioronment_agent_and_states():
     for position in grid:
         for vx in range(3):
             for vy in range(3):
-                print('new state about to be created:', (position, (vx, vy)))
                 all_possible_states.append((position, (vx, vy)))
 
     simple_track = Track(start_locations=start_locations,

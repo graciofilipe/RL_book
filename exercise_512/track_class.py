@@ -45,6 +45,8 @@ class Track:
         new_location = (location[0]+speed[0], location[1]+speed[1])
 
         if new_location in self.end_locations:
+            #print('track class went to end location in update by time', new_location)
+            self.set_location(new_location)
             return 0
         else:
             if new_location not in self.grid:
