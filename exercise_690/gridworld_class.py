@@ -1,7 +1,9 @@
 class Gridworld:
-    def __init__(self, grid_shape, initial_state, final_state):
+    def __init__(self, grid_shape, initial_position, final_position):
         self.grid_shape = grid_shape
-        self.state = initial_state
+        self.initial_position = initial_position
+        self.final_position = final_position
+        self.state = initial_position
         self.x_bound = grid_shape[0]
         self.y_bound = grid_shape[1]
 
