@@ -19,7 +19,7 @@ class Gridworld:
         new_state = min(self.x_bound, max(0, self.state[0]+action[0])), \
                     min(self.y_bound, max(0, self.state[1]+action[1]))
 
-        if new_state in self.final_position:
+        if new_state == self.final_position:
             reward = 0
             terminal_flag = True
         else:

@@ -1,4 +1,5 @@
 [
   "test_sarsa.py::test_just_load_things",
-  "test_sarsa.py::test_episode_simulator_with_print"
+  "test_sarsa.py::test_episode_simulator_with_print",
+  "test_sarsa.py::test_sarsa_creates_better_policy"
 ]
