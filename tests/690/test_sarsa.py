@@ -39,11 +39,11 @@ def test_episode_simulator_with_print():
 
 
 def test_sarsa_creates_better_policy():
-    n_sims = 200
-    sarsa_episodes = 10000
-    grid_shape = (10, 7)
-    final_position = (7, 3)
-    initial_position = (0, 3)
+    n_sims = 1000
+    sarsa_episodes = 1000
+    grid_shape = (5, 5)
+    final_position = (4, 2)
+    initial_position = (0, 2 )
 
 
     ## bad
