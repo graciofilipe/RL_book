@@ -23,6 +23,7 @@ def run_sweep(environment, agent, n_iter, gama, theta, alpha):
         while len(p_list) > 0:
             p_list.sort()
             state_action = p_list[-1][1]
+            p_list = p_list[:-1]
             reward, new_state = agent.return_model_based_state_action_reward_response(state_action)
             best_action = agent.get_best_action_for_state_from_Q(new_state)
             q_update = alpha * (
@@ -31,7 +32,8 @@ def run_sweep(environment, agent, n_iter, gama, theta, alpha):
             agent.increment_q_value(state_action, value_to_increment=q_update)
 
             states_actions_leading_to_new_state, rewards = agent.return_state_action_leading_to(state_action[0])
-            for idx in range(len(states_actions_leading_to_new_state)):
+            actions_leading_to_state = len(states_actions_leading_to_new_state)
+            for idx in range(actions_leading_to_state):
                 preceding_state_action = states_actions_leading_to_new_state[idx]
                 reward = rewards[idx]
                 best_action = agent.get_best_action_for_state_from_Q(state_action[0])
