@@ -1,11 +1,38 @@
 '''some useful functions for the sweeping algorithm'''
 
 
+
+def add_to_priority_list(current_priority_list, item_to_add):
+    rebuilt_list =[]
+    if len(current_priority_list)>0:
+        rebuilt_list.append(item_to_add)
+        return rebuilt_list
+    else:
+        state_action_to_add = item_to_add[1]
+        priority_of_the_new_item = item_to_add[0]
+        for current_item in current_priority_list:
+            if current_item[1] == state_action_to_add:
+                priority_of_the_current_item = current_item[0]
+                if priority_of_the_new_item > priority_of_the_current_item:
+                    rebuilt_list.append(item_to_add)
+                else:
+                    rebuilt_list.append(current_item)
+            else:
+                rebuilt_list.append(current_item)
+
+        rebuilt_list.sort()
+        return(rebuilt_list)
+
+
+
+
 def run_sweep(environment, agent, n_iter, gama, theta, alpha):
 
-    p_list = []
+
 
     for iteration in range(n_iter):
+        p_list = []
+
         # a
         current_state = environment.get_state()
 
@@ -28,11 +55,9 @@ def run_sweep(environment, agent, n_iter, gama, theta, alpha):
         # f
         if p > theta:
             new_item = (p, (current_state, action))
-            p_list.append(new_item) # TODO: if state_action is in p_list, keep only the high priority one
-
+            p_list = add_to_priority_list(p_list, new_item)
         # g
         while len(p_list) > 0:
-            p_list.sort()
             state_action = p_list[-1][1]
             p_list = p_list[:-1]
             reward, new_state = agent.return_model_based_state_action_reward_response(state_action)
@@ -53,6 +78,5 @@ def run_sweep(environment, agent, n_iter, gama, theta, alpha):
                         )
                 if p > theta:
                     new_item = (p, preceding_state_action)
-                    p_list.append(new_item) # TODO: if state_action is in p_list, keep only the high priority one
-
+                    p_list = add_to_priority_list(p_list, new_item)
     return agent
