@@ -4,21 +4,28 @@
 
 def add_to_priority_list(current_priority_list, item_to_add):
     rebuilt_list =[]
-    if len(current_priority_list)>0:
+    # if the list is empty, it's trivial
+    if len(current_priority_list)==0:
         rebuilt_list.append(item_to_add)
         return rebuilt_list
+
+    # if the list isn't empty need to check if there is a duplicate
     else:
+        append_new_item = True
         state_action_to_add = item_to_add[1]
         priority_of_the_new_item = item_to_add[0]
         for current_item in current_priority_list:
             if current_item[1] == state_action_to_add:
                 priority_of_the_current_item = current_item[0]
-                if priority_of_the_new_item > priority_of_the_current_item:
-                    rebuilt_list.append(item_to_add)
-                else:
+                if priority_of_the_new_item < priority_of_the_current_item:
                     rebuilt_list.append(current_item)
+                    append_new_item = False
             else:
                 rebuilt_list.append(current_item)
+
+        # append the new item
+        if append_new_item:
+            rebuilt_list.append(item_to_add)
 
         rebuilt_list.sort()
         return(rebuilt_list)
@@ -27,8 +34,6 @@ def add_to_priority_list(current_priority_list, item_to_add):
 
 
 def run_sweep(environment, agent, n_iter, gama, theta, alpha):
-
-
 
     for iteration in range(n_iter):
         p_list = []
@@ -51,11 +56,11 @@ def run_sweep(environment, agent, n_iter, gama, theta, alpha):
         best_action = agent.get_best_action_for_state_from_Q(new_state)
         p = abs(reward + gama*agent.q_dict[(new_state, best_action)] - agent.q_dict[(current_state, action)]
                 )
-
         # f
         if p > theta:
             new_item = (p, (current_state, action))
             p_list = add_to_priority_list(p_list, new_item)
+
         # g
         while len(p_list) > 0:
             state_action = p_list[-1][1]
