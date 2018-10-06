@@ -1,3 +1,3 @@
 [
-  "test_agent.py::test_return_model_based_state_action_reward_response"
+  "test_agent.py::test_return_state_action_leading_to"
 ]
