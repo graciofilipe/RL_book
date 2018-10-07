@@ -35,25 +35,31 @@ def test_episode_simulator():
 
 def test_if_more_iterations_produce_better_episodes():
 
-    good_iters = 15000
+    good_iters = 6666
     n_sims = 500
-    n_runs = 2
+    n_runs = 1
+
+    grid_shape = (6,6)
+    final_position = (5,5)
 
     good_episode_lens = []
     bad_episode_lens = []
 
+
     for run in range(n_runs):
 
-        environment, agent = create_environment_agent_and_states(grid_shape=(4, 4),
+        environment, agent = create_environment_agent_and_states(grid_shape=grid_shape,
                                                                  initial_position=(0, 0),
-                                                                 final_position=(3, 3),
-                                                                 epsilon=0.1)
+                                                                 final_position=final_position,
+                                                                 epsilon=0.2)
         bad_agent = run_sweep(environment=environment,
                               agent=agent,
                               alpha=0.5,
                               gama=0.9,
                               n_iter=1,
                               theta=0.1)
+
+        bad_agent.epsilon=0.01
         for i in range(n_sims):
             state_action_tuple_list, reward_list = run_episode(start_state=(0, 0),
                                                                environment=environment,
@@ -64,16 +70,18 @@ def test_if_more_iterations_produce_better_episodes():
 
 
         #####################################
-        environment, agent = create_environment_agent_and_states(grid_shape=(4, 4),
+        environment, agent = create_environment_agent_and_states(grid_shape=grid_shape,
                                                                  initial_position=(0, 0),
-                                                                 final_position=(3, 3),
-                                                                 epsilon=0.1)
+                                                                 final_position=final_position,
+                                                                 epsilon=0.2)
         good_agent = run_sweep(environment=environment,
                                agent=agent,
                               alpha=0.5,
                               gama=0.9,
                               n_iter=good_iters,
                               theta=0.1)
+
+        good_agent.epsilon = 0.01
         for i in range(n_sims):
             state_action_tuple_list, reward_list = run_episode(start_state=(0, 0),
                                                                environment=environment,
