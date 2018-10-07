@@ -1,0 +1,18 @@
+[
+  "test_agent.py::test_update_model",
+  "test_agent.py::test_return_model_based_state_action_reward_response",
+  "test_agent.py::test_get_best_action_for_state_from_Q",
+  "test_agent.py::test_return_action",
+  "test_agent.py::test_replace_q_value",
+  "test_agent.py::test_increment_q_value",
+  "test_agent.py::test_return_state_action_leading_to",
+  "test_environment.py::test_set_and_get_state",
+  "test_environment.py::test_return_state_and_reward_post_action",
+  "test_sweeping.py::test_basic_run_through",
+  "test_sweeping.py::test_episode_simulator",
+  "test_sweeping.py::test_if_more_iterations_produce_better_episodes",
+  "test_sweeping.py::test_item_is_added_to_priority_list",
+  "test_sweeping.py::test_item_isnt_added_to_priority_list",
+  "test_sweeping.py::test_item_is_replaced_in_priority_list",
+  "test_sweeping.py::test_item_is_added_to_empty_list"
+]
