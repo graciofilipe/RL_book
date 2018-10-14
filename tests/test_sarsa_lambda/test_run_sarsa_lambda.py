@@ -13,4 +13,8 @@ def test_run_sarsa_lambda_no_crash():
                      agent=agent,
                      environment=grid,
                      n_episodes=3,
+                     gama = 0.99,
                      state_0=(0,0))
+
+    print('\n')
+    print(agent.return_w())

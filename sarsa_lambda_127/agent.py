@@ -12,7 +12,7 @@ class Agent:
         # get the number of features, so I know the number of w
         feature_vec = self.state_action_to_feature_vec(state = sample_state, action=sample_action)
         n_features = len(feature_vec)
-        self.w = [np.random.random() for _ in range(n_features)]
+        self.w = np.array([np.random.random() for _ in range(n_features)])
 
     def return_w(self):
         return self.w
@@ -25,7 +25,7 @@ class Agent:
         pairwise_iterator = itertools.product(list(state), list(action))
         state_action_differences = [x[0]-x[1] for x in pairwise_iterator]
         feature_vec = state_action + state_action_products + state_action_differences
-        return feature_vec
+        return np.array(feature_vec)
 
     def from_state_action_to_q_estimate(self, state, action):
         feature_values = self.state_action_to_feature_vec(state, action)

@@ -33,7 +33,7 @@ def test_state_action_to_feature_vec():
                    state[0] - action[0], state[0] - action[1],
                    state[1] - action[0], state[1] - action[1]]
 
-    assert fv == feature_vec
+    assert list(fv) == feature_vec
 
 
 def test_from_state_action_to_q_estimate():
