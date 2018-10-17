@@ -22,9 +22,8 @@ class Agent:
         state_action = list(state) + list(action)
         pairwise_iterator = itertools.product(list(state), list(action))
         state_action_products = [x[0]*x[1] for x in pairwise_iterator]
-        pairwise_iterator = itertools.product(list(state), list(action))
-        state_action_differences = [x[0]-x[1] for x in pairwise_iterator]
-        feature_vec = state_action + state_action_products + state_action_differences
+        state_difference = abs(list(state)[1]-list(state)[0])
+        feature_vec = state_action + state_action_products + [state_difference]
         return np.array(feature_vec)
 
     def from_state_action_to_q_estimate(self, state, action):
