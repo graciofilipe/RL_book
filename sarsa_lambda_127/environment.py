@@ -4,8 +4,8 @@ class Environment:
         self.initial_position = initial_position
         self.final_position = final_position
         self.state = initial_position
-        self.x_bound = grid_shape[0] -1
-        self.y_bound = grid_shape[1] -1
+        self.x_bound = grid_shape[0] - 1
+        self.y_bound = grid_shape[1] - 1
         self.blocks = blocks
 
 

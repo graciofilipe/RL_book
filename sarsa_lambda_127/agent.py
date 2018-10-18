@@ -12,7 +12,8 @@ class Agent:
         # get the number of features, so I know the number of w
         feature_vec = self.state_action_to_feature_vec(state = sample_state, action=sample_action)
         n_features = len(feature_vec)
-        self.w = np.array([np.random.random() for _ in range(n_features)])
+        self.w = [10, 10, 10, 10, 0, 0, 0, 0, -5]
+        #self.w = np.array([np.random.random() for _ in range(n_features)])
 
     def return_w(self):
         return self.w
@@ -22,8 +23,9 @@ class Agent:
         state_action = list(state) + list(action)
         pairwise_iterator = itertools.product(list(state), list(action))
         state_action_products = [x[0]*x[1] for x in pairwise_iterator]
-        state_difference = abs(list(state)[1]-list(state)[0])
-        feature_vec = state_action + state_action_products + [state_difference]
+        next_state = state[0]+action[0], state[1]+action[1]
+        xy_next_state_difference = abs(next_state[1]-next_state[0])
+        feature_vec = state_action + state_action_products + [xy_next_state_difference]
         return np.array(feature_vec)
 
     def from_state_action_to_q_estimate(self, state, action):
@@ -33,12 +35,13 @@ class Agent:
 
     def get_best_action_for_state_from_Q(self,  state_to_interrogate):
         value_list = []
-        for action in self.possible_actions:
+        possible_actions = self.possible_actions
+        for action in possible_actions:
             val_estimate = self.from_state_action_to_q_estimate(state=state_to_interrogate,
-                                                 action=action)
+                                                                action=action)
             value_list.append(val_estimate)
         arg_max = np.argmax(value_list)
-        return self.possible_actions[arg_max]
+        return possible_actions[arg_max]
 
     def return_action(self, state):
         r = np.random.uniform()

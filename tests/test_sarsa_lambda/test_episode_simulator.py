@@ -7,7 +7,9 @@ def test_episode_simulator():
                                                       initial_position=(0,0),
                                                       final_position=(3,3),
                                                       blocks=[],
-                                                      epsilon=0.1)
+                                                      epsilon=0.0)
+
+    print('agent w', agent.return_w())
 
     state_action_tuple_list, reward_list = run_episode(start_state=(0,0), environment=grid, agent=agent)
     for sa in state_action_tuple_list:

@@ -22,23 +22,25 @@ def test_run_sarsa_lambda_no_crash():
 
 
 def test_run_sarsa_lambda_kinda_works():
+
     grid, agent = create_environment_agent_and_states(grid_shape=(4,4),
                                                       initial_position=(0,0),
                                                       final_position=(3,3),
                                                       blocks=[],
                                                       epsilon=0.1)
-
-    agent = run_sarsa_lambda(alpha=0.1,
-                     lamb=0.5,
-                     agent=agent,
-                     environment=grid,
-                     n_episodes=1111,
-                     gama = 0.1,
-                     state_0=(0, 0))
+    agent = run_sarsa_lambda(alpha=0.01,
+                             lamb=0.5,
+                             agent=agent,
+                             environment=grid,
+                             n_episodes=666,
+                             gama = 0.1,
+                             state_0=(0, 0))
 
     print('\n')
     print('agent w', agent.return_w())
+    agent.epsilon = 0
+    state_action_tuple_list, reward_list = run_episode(start_state=(0,0),
+                                                       environment=grid,
+                                                       agent=agent)
 
-    state_action_tuple_list, reward_list = run_episode(start_state=(0,0), environment=grid, agent=agent)
-    for sa in state_action_tuple_list:
-        print(sa)
+    print('\n number of steps until completion', len(state_action_tuple_list))
