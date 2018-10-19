@@ -11,7 +11,7 @@ def test_initialize_w():
     n_state_dims = len(sample_state)
     n_action_dims = 2
     agent.initialize_w(sample_state=sample_state)
-    n_features = n_state_dims + n_action_dims + n_action_dims*n_state_dims*2
+    n_features = n_state_dims + n_action_dims + n_action_dims*n_state_dims + 1
     assert len(agent.w) == n_features
 
 
@@ -30,8 +30,7 @@ def test_state_action_to_feature_vec():
                    action[0], action[1],
                    state[0]*action[0], state[0]*action[1],
                    state[1]*action[0], state[1]*action[1],
-                   state[0] - action[0], state[0] - action[1],
-                   state[1] - action[0], state[1] - action[1]]
+                    abs(state[1]-state[0])]
 
     assert list(fv) == feature_vec
 
@@ -55,9 +54,7 @@ def test_from_state_action_to_q_estimate():
     q_est0 = agent.from_state_action_to_q_estimate(state=state, action=action)
     q_est1 = state[0] + state[1] + action[0] + action[1] +\
              state[0] * action[0] + state[0] * action[1]+\
-             state[1] * action[0]+ state[1] * action[1]+\
-             state[0] - action[0]+ state[0] - action[1]+\
-             state[1] - action[0]+ state[1] - action[1]
+             state[1] * action[0]+ state[1] * action[1] + abs(state[1]-state[0])
 
     assert q_est0==q_est1
 
@@ -74,7 +71,7 @@ def test_get_best_action_for_state_from_Q():
 
     best_action_set = {agent.get_best_action_for_state_from_Q(state_to_interrogate=state)}
     print(best_action_set)
-    acceptable_answer_set = {(0,-1), (0,-1)}
+    acceptable_answer_set = {(1, 0), (0, 1)}
     assert len(best_action_set.intersection(acceptable_answer_set)) > 0
 
 def test_return_action():

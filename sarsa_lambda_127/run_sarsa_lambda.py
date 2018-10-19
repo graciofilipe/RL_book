@@ -41,7 +41,8 @@ def run_sarsa_lambda(alpha, lamb, gama,
             w = agent.return_w() + \
                 alpha*(delta + q - q_old)*z - \
                 alpha*(q - q_old)*feature_vec
-
+            aux = z
+            aux2 = w
             agent.update_w(w)
             q_old = q_next
             feature_vec = next_feature_vec
