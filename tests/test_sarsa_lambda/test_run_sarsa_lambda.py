@@ -28,6 +28,7 @@ def test_run_sarsa_lambda_kinda_works():
                                                       final_position=(3,3),
                                                       blocks=[],
                                                       epsilon=0.1)
+
     agent = run_sarsa_lambda(alpha=0.01,
                              lamb=0.5,
                              agent=agent,
