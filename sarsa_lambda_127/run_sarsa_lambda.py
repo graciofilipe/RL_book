@@ -26,7 +26,9 @@ def run_sarsa_lambda(alpha, lamb, gama,
 
             next_action = agent.return_action(next_state)
 
-            next_feature_vec = agent.state_action_to_feature_vec(state=next_state, action=next_action)
+            next_feature_vec = agent.state_action_to_feature_vec(state=next_state,
+                                                                 action=next_action)
+
             if termination_flag:
                 next_feature_vec = np.array([0 for _ in range(n_features)])
 
@@ -39,6 +41,7 @@ def run_sarsa_lambda(alpha, lamb, gama,
             w = agent.return_w() + \
                 alpha*(delta + q - q_old)*z - \
                 alpha*(q - q_old)*feature_vec
+
             agent.update_w(w)
             q_old = q_next
             feature_vec = next_feature_vec
