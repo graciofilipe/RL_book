@@ -33,7 +33,7 @@ def test_run_sarsa_lambda_kinda_works():
                              lamb=0.2,
                              agent=agent,
                              environment=grid,
-                             n_episodes=111,
+                             n_episodes=1111,
                              gama=0.2,
                              state_0=(0, 0))
 
