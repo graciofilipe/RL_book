@@ -1,5 +1,7 @@
 from sarsa_lambda_127.environment import Environment
 from sarsa_lambda_127.agent import Agent
+from sarsa_lambda_127.agent_2 import Agent2
+
 
 
 def create_environment_agent_and_states(grid_shape,
@@ -17,7 +19,7 @@ def create_environment_agent_and_states(grid_shape,
 
 
     # create the agent
-    agent = Agent(possible_actions=agent_actions,
+    agent = Agent2(possible_actions=agent_actions,
                   epsilon=epsilon)
 
     # the sample state is required to get the right shape for w

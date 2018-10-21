@@ -24,10 +24,10 @@ class Environment:
             new_state = self.get_state()
 
         if new_state == self.final_position:
-            reward = 0
+            reward = 1
             terminal_flag = True
         else:
-            reward = -1
+            reward = 0
             terminal_flag = False
 
         return new_state, reward, terminal_flag
