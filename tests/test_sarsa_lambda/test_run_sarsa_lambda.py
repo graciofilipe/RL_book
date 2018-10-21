@@ -7,16 +7,15 @@ def test_run_sarsa_lambda_no_crash():
                                                       initial_position=(0,0),
                                                       final_position=(3,3),
                                                       blocks=[],
-                                                      epsilon=0.1)
+                                                      epsilon=0)
 
-
-    agent = run_sarsa_lambda(alpha=0.1,
-                     lamb=0.5,
-                     agent=agent,
-                     environment=grid,
-                     n_episodes=11,
-                     gama = 0.1,
-                     state_0=(0, 0))
+    agent = run_sarsa_lambda(alpha=0.5,
+                             lamb=0.01,
+                             agent=agent,
+                             environment=grid,
+                             n_episodes=110,
+                             gama=0.5,
+                             state_0=(0, 0))
 
     print('\n')
     print('agent w', agent.return_w())
@@ -28,21 +27,21 @@ def test_run_sarsa_lambda_kinda_works():
                                                       initial_position=(0,0),
                                                       final_position=(3,3),
                                                       blocks=[],
-                                                      epsilon=0.1)
+                                                      epsilon=0.3)
 
-    agent = run_sarsa_lambda(alpha=0.01,
-                             lamb=0.5,
+    agent = run_sarsa_lambda(alpha=0.1,
+                             lamb=0.2,
                              agent=agent,
                              environment=grid,
-                             n_episodes=666,
-                             gama = 0.1,
+                             n_episodes=111,
+                             gama=0.2,
                              state_0=(0, 0))
 
     print('\n')
     print('agent w', agent.return_w())
-    agent.epsilon = 0
+    agent.epsilon = 0.01
     state_action_tuple_list, reward_list = run_episode(start_state=(0,0),
                                                        environment=grid,
-                                                       agent=agent)
+                                                       agent=agent)  #
 
     print('\n number of steps until completion', len(state_action_tuple_list))

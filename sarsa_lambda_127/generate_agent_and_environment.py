@@ -21,7 +21,7 @@ def create_environment_agent_and_states(grid_shape,
                   epsilon=epsilon)
 
     # the sample state is required to get the right shape for w
-    agent.initialize_w(sample_state=initial_position)
+    agent.initialize_w(sample_state=initial_position, environment=grid)
 
     return grid, agent
 

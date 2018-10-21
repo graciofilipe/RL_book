@@ -11,9 +11,10 @@ def run_sarsa_lambda(alpha, lamb, gama,
     for episode in range(n_episodes):
 
         environment.set_state(state_0)
-        action = agent.return_action(state_0)
+        action = agent.return_action(state_0, environment=environment)
         feature_vec = agent.state_action_to_feature_vec(state=state_0,
-                                                        action=action)
+                                                        action=action,
+                                                        environment=environment)
         z = np.array([0 for _ in range(n_features)])
         q_old = 0
 
@@ -24,10 +25,11 @@ def run_sarsa_lambda(alpha, lamb, gama,
             next_state, reward, termination_flag = environment.return_state_and_reward_post_action(action=action)
             environment.set_state(next_state)
 
-            next_action = agent.return_action(next_state)
+            next_action = agent.return_action(next_state, environment=environment)
 
             next_feature_vec = agent.state_action_to_feature_vec(state=next_state,
-                                                                 action=next_action)
+                                                                 action=next_action,
+                                                                 environment=environment)
 
             if termination_flag:
                 next_feature_vec = np.array([0 for _ in range(n_features)])
@@ -37,28 +39,19 @@ def run_sarsa_lambda(alpha, lamb, gama,
 
             delta = reward + gama*q_next - q
 
-            z = gama*lamb*z + (1-alpha*gama*lamb*np.dot(z, feature_vec))*feature_vec
-            w = agent.return_w() + \
-                alpha*(delta + q - q_old)*z - \
-                alpha*(q - q_old)*feature_vec
+            fv_scaling = (1 - alpha * gama * lamb * np.dot(z, feature_vec))
+            z = gama * lamb * z + fv_scaling * feature_vec
             aux = z
+
+            z_w = alpha * (delta + q - q_old) * z
+            fv_w = alpha * (q_old - q) * feature_vec
+            w_inc = z_w + fv_w
+            w = agent.return_w() + w_inc
             aux2 = w
+
             agent.update_w(w)
             q_old = q_next
             feature_vec = next_feature_vec
             action = next_action
 
     return agent
-
-
-
-
-
-
-
-
-
-
-
-
-
