@@ -1,8 +1,5 @@
 from prioritised_sweep_8.agent import SweepingAgent
 
-
-
-#  :
 def test_update_model(state_action_to_update=('s1', 'a1'),
                       reward_newstate=('r6', 's6')):
     q = {}
