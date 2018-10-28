@@ -28,7 +28,7 @@ def run_one_step_actor_critic(agent,
                 new_state_value = 0
             delta = reward + gama*new_state_value - state_value
 
-            value_estimate_gradient = agent.state_value_estimate_gradient()
+            value_estimate_gradient = agent.state_value_estimate_gradient(state=state)
             w_increment = alpha_w*delta*value_estimate_gradient
             agent.increment_w(w_increment)
 

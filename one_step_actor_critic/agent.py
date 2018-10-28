@@ -12,15 +12,18 @@ class Agent:
     def initialize_w(self):
         # get the number of features, so I know the number of w
         n_features = 3
-        self.w = [0 for _ in range(n_features)]
+        self.w = np.array([0 for _ in range(n_features)])
 
     def initialize_th(self):
         # get the number of features, so I know the number of w
         n_features = 3
-        self.th = [0 for _ in range(n_features)]
+        self.th = np.array([0 for _ in range(n_features)])
 
     def return_w(self):
         return self.w
+
+    def return_th(self):
+        return self.th
 
 
     def state_to_feature_vec(self, state):
@@ -34,9 +37,9 @@ class Agent:
         val_estimate = np.dot(a=self.w, b=feature_values)
         return val_estimate
 
-    def state_value_estimate_gradient(self):
-        w = self.return_w()
-        return np.array(w)
+    def state_value_estimate_gradient(self, state):
+        g = self.state_to_feature_vec(state)
+        return np.array(g)
 
 
 
@@ -51,13 +54,13 @@ class Agent:
 
     def from_state_action_to_q_estimate(self, state, action, environment):
         feature_values = self.state_action_to_feature_vec(state, action, environment=environment)
-        val_estimate = np.dot(a=self.w, b=feature_values)
+        val_estimate = np.dot(a=self.th, b=feature_values)
         return val_estimate
 
     def get_state_action_values(self, state_to_interrogate, environment):
         value_list = []
         possible_actions = self.possible_actions
-        random.shuffle(possible_actions)
+        #random.shuffle(possible_actions)
         for action in possible_actions:
             val_estimate = self.from_state_action_to_q_estimate(state=state_to_interrogate,
                                                                 action=action,
@@ -77,7 +80,8 @@ class Agent:
 
     def ln_policy_gradient(self, state, action, environment):
         x = self.state_action_to_feature_vec(state, action, environment)
-        sm = softmax(x)
+        z = np.dot(a=self.th, b=x)
+        sm = softmax(z)
         out = x-sm
         return out
 
@@ -93,13 +97,18 @@ class Agent:
         assert len(self.w) == len(new_w)
         self.w = new_w
 
+    def update_th(self, new_th):
+        assert len(self.th) == len(new_th)
+        self.th = new_th
+
+
     def increment_w(self, w_increment):
         assert len(self.w) == len(w_increment)
-        self.w += w_increment
+        self.w = np.array(self.w) + np.array(w_increment)
 
     def increment_th(self, th_increment):
         assert len(self.w) == len(th_increment)
-        self.th += th_increment
+        self.th = np.array(self.th) + np.array(th_increment)
 
 
 
