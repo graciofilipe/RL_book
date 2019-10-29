@@ -1,3 +1,6 @@
-venv/
+.venv
 bookdraft2018.pdf
 RLbook2018.pdf
+.idea
+__pycache__
+some_meaningless_change
