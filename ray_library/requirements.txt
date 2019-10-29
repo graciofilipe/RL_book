@@ -1,0 +1,5 @@
+numpy
+pandas
+'ray[rllib]'
+'ray[debug]'
+requests
