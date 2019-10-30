@@ -1,6 +1,5 @@
 import numpy.random as random
 
-
 class SingleArmBandit:
 
     def __init__(self, reward_mean, reward_var, movement_var):
