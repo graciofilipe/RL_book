@@ -22,6 +22,8 @@ from ray import tune
 from ray.rllib.utils import try_import_tf
 from ray.tune import grid_search
 
+import ray.rllib.agents.ppo as ppo
+
 tf = try_import_tf()
 
 
@@ -47,11 +49,9 @@ class Maze44(gym.Env):
         return self.current_state
 
     def step(self, action):
-        #print('stepping')
         self.take_action(action)
         reward = self.get_reward()
         obs = self.get_state()
-        #print('obs', obs)
         episode_over = (self.current_state == self.end_state).all()
         if episode_over:
             self.reset()
@@ -119,6 +119,9 @@ if __name__ == "__main__":
         },
         checkpoint_at_end=True
     )
-    import ipdb
-    ipdb.set_trace()
-    x=1
+
+    config = ppo.DEFAULT_CONFIG.copy()
+    trainer = ppo.PPOTrainer(config=config, env=Maze44)
+    best_log = tunned.get_best_logdir('episode_reward_mean')
+    best_log += '/checkpoint_3/checkpoint-3' # please excuse the hard coding
+    trainer.restore(best_log)
