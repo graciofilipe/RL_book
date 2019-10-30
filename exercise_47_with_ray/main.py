@@ -75,3 +75,5 @@ if __name__ == "__main__":
         if i % 30 == 0:
             checkpoint = trainer.save()
             print("checkpoint saved at", checkpoint)
+
+    import ipdb; ipdb.set_trace()

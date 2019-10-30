@@ -30,7 +30,6 @@ class CarBusiness(gym.Env):
         returns_at_1 = np.random.poisson(lam=self.lambda_returns_1)
         self.state[0] +=  returns_at_0 - requests_at_0
         self.state[1] += returns_at_1 - requests_at_1
-        print('self.state inside customer actions', self.state)
         return (requests_at_0 + requests_at_1)*self.rental_profit
 
     def step(self, action):
@@ -38,22 +37,16 @@ class CarBusiness(gym.Env):
         moving_costs = self.take_action(action)
         reward = int(day_profit - moving_costs)
         obs = self.get_state()
-        print('observation xxx', obs)
         return obs, reward, False, {}
 
     def get_state(self):
         return self.state
 
     def take_action(self, action):
-        print('START slef.state inside take action', self.state)
         real_action = self.disc_to_real_converter[action]
-        print('real_action', real_action)
-        a = np.min(np.max(0, self.state[0] + real_action), 19)
-        b = np.min(np.max(0, self.state[1] - real_action), 19)
-        # print('a', a)
-        # print('b', b)
+        a = np.min([np.max([0, self.state[0] + real_action]), 19])
+        b = np.min([np.max([0, self.state[1] - real_action]), 19])
         self.state = np.array([a , b])
-        print('END slef.state inside take action', self.state)
         return abs(action)*self.transport_cost
 
 
