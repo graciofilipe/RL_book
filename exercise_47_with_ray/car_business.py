@@ -37,7 +37,12 @@ class CarBusiness(gym.Env):
         moving_costs = self.take_action(action)
         reward = int(day_profit - moving_costs)
         obs = self.get_state()
-        return obs, reward, False, {}
+        if (obs == np.array([0, 0])).all():
+            end = True
+            reward = -1
+        else:
+            end = False
+        return obs, reward, end, {}
 
     def get_state(self):
         return self.state

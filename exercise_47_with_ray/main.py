@@ -5,43 +5,11 @@ This example shows:
   - using Tune for grid search
 You can visualize experiment results in ~/ray_results using TensorBoard.
 """
-from car_business import CarBusiness
-
 import numpy as np
-import gym
-from ray.rllib.models import ModelCatalog
-from ray.rllib.models.tf.tf_modelv2 import TFModelV2
-from ray.rllib.models.tf.fcnet_v2 import FullyConnectedNetwork
-from gym import spaces
-
-import ray
-from ray import tune
+from car_business import CarBusiness
 from ray.rllib.utils import try_import_tf
-from ray.tune import grid_search
-
-import ray.rllib.agents.ppo as ppo
 
 tf = try_import_tf()
-
-
-
-class CustomModel(TFModelV2):
-    """Example of a custom model that just delegates to a fc-net."""
-
-    def __init__(self, obs_space, action_space, num_outputs, model_config,
-                 name):
-        super(CustomModel, self).__init__(obs_space, action_space, num_outputs,
-                                          model_config, name)
-        self.model = FullyConnectedNetwork(obs_space, action_space,
-                                           num_outputs, model_config, name)
-        self.register_variables(self.model.variables())
-
-    def forward(self, input_dict, state, seq_lens):
-        return self.model.forward(input_dict, state, seq_lens)
-
-    def value_function(self):
-        return self.model.value_function()
-
 
 if __name__ == "__main__":
     # Can also register the env creator function explicitly with:
@@ -54,26 +22,39 @@ if __name__ == "__main__":
     config = ppo.DEFAULT_CONFIG.copy()
     config["num_gpus"] = 0
     config["eager"] = False
+    config['model'] = {'conv_filters': None, 'conv_activation': 'relu', 'fcnet_activation': 'relu',
+                       'fcnet_hiddens': [4, 4], 'free_log_std': False, 'no_final_linear': False,
+                       'vf_share_layers': True, 'use_lstm': False, 'max_seq_len': 20, 'lstm_cell_size': 256,
+                       'lstm_use_prev_action_reward': False, 'state_shape': None, 'framestack': True, 'dim': 4,
+                       'grayscale': False, 'zero_mean': True, 'custom_preprocessor': None, 'custom_model': None,
+                       'custom_action_dist': None, 'custom_options': {}}
+    config['gamma'] = 0.9
+    config['num_workers'] = 6
+
     config['env_config'] = {
         'rental_profit': 10,
-        'transport_cost':  2,
-        'lambda_requests_0':  3,
-        'lambda_requests_1':  4,
-        'lambda_returns_0':  3,
-        'lambda_returns_1':  2,
-        'initial_state':  np.array([10, 10])}
+        'transport_cost': 2,
+        'lambda_requests_0': 3,
+        'lambda_requests_1': 4,
+        'lambda_returns_0': 3,
+        'lambda_returns_1': 2,
+        'initial_state': np.array([10, 10])}
+
+    # import ipdb; ipdb.set_trace()
 
     trainer = ppo.PPOTrainer(config=config, env=CarBusiness)
 
     # Can optionally call trainer.restore(path) to load a checkpoint.
 
-    for i in range(100):
+    for i in range(300):
         # Perform one iteration of training the policy with PPO
         result = trainer.train()
         print(pretty_print(result))
 
-        if i % 30 == 0:
+        if i % 50 == 0:
             checkpoint = trainer.save()
             print("checkpoint saved at", checkpoint)
 
-    import ipdb; ipdb.set_trace()
+    import ipdb;
+
+    ipdb.set_trace()
