@@ -26,11 +26,27 @@ class CarBusiness(gym.Env):
     def customer_actions(self):
         requests_at_0 = np.random.poisson(lam=self.lambda_requests_0)
         requests_at_1 = np.random.poisson(lam=self.lambda_requests_1)
+        rented_at_0 = min([requests_at_0, self.state[0]])
+        rented_at_1 = min([requests_at_1, self.state[1]])
+
+        print('state before customer actions', self.state)
+
+        print('requests_at_0', requests_at_0)
+        print('requests_at_1', requests_at_1)
+        print('rented_at_0', rented_at_0)
+        print('rented_at_1', rented_at_1)
+
         returns_at_0 = np.random.poisson(lam=self.lambda_returns_0)
         returns_at_1 = np.random.poisson(lam=self.lambda_returns_1)
-        self.state[0] +=  returns_at_0 - requests_at_0
-        self.state[1] += returns_at_1 - requests_at_1
-        return (requests_at_0 + requests_at_1)*self.rental_profit
+
+        print('returns_at_0', returns_at_0)
+        print('returns_at_1', returns_at_1)
+        self.state[0] += returns_at_0 - rented_at_0
+        self.state[1] += returns_at_1 - rented_at_1
+
+        print('state after customer actions', self.state)
+        # import ipdb; ipdb.set_trace()
+        return (rented_at_0 + rented_at_1)*self.rental_profit
 
     def step(self, action):
         day_profit = self.customer_actions()
@@ -39,9 +55,12 @@ class CarBusiness(gym.Env):
         obs = self.get_state()
         if (obs == np.array([0, 0])).all():
             end = True
-            reward = -1
+            reward = 0
+            print('episode over')
         else:
             end = False
+
+        print('obs', obs)
         return obs, reward, end, {}
 
     def get_state(self):
@@ -49,10 +68,13 @@ class CarBusiness(gym.Env):
 
     def take_action(self, action):
         real_action = self.disc_to_real_converter[action]
-        a = np.min([np.max([0, self.state[0] + real_action]), 19])
-        b = np.min([np.max([0, self.state[1] - real_action]), 19])
+        print('taking action', real_action)
+        print('state before action', self.state)
+        a = np.min([np.max([0, self.state[0] + real_action]), 20])
+        b = np.min([np.max([0, self.state[1] - real_action]), 20])
         self.state = np.array([a , b])
-        return abs(action)*self.transport_cost
+        print('state after action', self.state)
+        return abs(real_action)*self.transport_cost
 
 
 
