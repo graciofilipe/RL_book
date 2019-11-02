@@ -23,7 +23,7 @@ if __name__ == "__main__":
     config["num_gpus"] = 0
     config["eager"] = False
     config['model'] = {'conv_filters': None, 'conv_activation': 'relu', 'fcnet_activation': 'relu',
-                       'fcnet_hiddens': [4, 4, 4], 'free_log_std': False, 'no_final_linear': False,
+                       'fcnet_hiddens': [12, 12, 12], 'free_log_std': False, 'no_final_linear': False,
                        'vf_share_layers': True, 'use_lstm': False, 'max_seq_len': 20, 'lstm_cell_size': 256,
                        'lstm_use_prev_action_reward': False, 'state_shape': None, 'framestack': True, 'dim': 4,
                        'grayscale': False, 'zero_mean': True, 'custom_preprocessor': None, 'custom_model': None,
@@ -32,8 +32,7 @@ if __name__ == "__main__":
     config['num_workers'] = 6
     config['env_config'] = {
         'end_locations': [
-            np.array([9, 40]), np.array([9, 39]), np.array([9, 38]), np.array([9, 37]),
-        ],
+            np.array([9, 40]), np.array([9, 39]), np.array([9, 38]), np.array([9, 37])],
         'initial_state': (np.array([4, 0]), np.array([0, 0])),
         'max_speed': 5
     }
@@ -42,7 +41,7 @@ if __name__ == "__main__":
 
     # Can optionally call trainer.restore(path) to load a checkpoint.
 
-    for i in range(200):
+    for i in range(222):
         # Perform one iteration of training the policy with PPO
         result = trainer.train()
         print(pretty_print(result))
@@ -57,4 +56,6 @@ if __name__ == "__main__":
     # print(Counter(zerozero))
     # print(Counter(ntzero))
     # print(Counter(zeront))
-    import ipdb; ipdb.set_trace()
+
+    tr = Track(config['env_config'])
+    tr.play_episode(trainer)
