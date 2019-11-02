@@ -29,28 +29,27 @@ class CarBusiness(gym.Env):
         rented_at_0 = min([requests_at_0, self.state[0]])
         rented_at_1 = min([requests_at_1, self.state[1]])
 
-        print('state before customer actions', self.state)
-
-        print('requests_at_0', requests_at_0)
-        print('requests_at_1', requests_at_1)
-        print('rented_at_0', rented_at_0)
-        print('rented_at_1', rented_at_1)
+        # print('state before customer actions', self.state)
+        # print('requests_at_0', requests_at_0)
+        # print('requests_at_1', requests_at_1)
+        # print('rented_at_0', rented_at_0)
+        # print('rented_at_1', rented_at_1)
 
         returns_at_0 = np.random.poisson(lam=self.lambda_returns_0)
         returns_at_1 = np.random.poisson(lam=self.lambda_returns_1)
 
-        print('returns_at_0', returns_at_0)
-        print('returns_at_1', returns_at_1)
-        self.state[0] += returns_at_0 - rented_at_0
-        self.state[1] += returns_at_1 - rented_at_1
+        # print('returns_at_0', returns_at_0)
+        # print('returns_at_1', returns_at_1)
+        self.state[0] = np.min([np.max([self.state[0] + (returns_at_0 - rented_at_0), 0]), 20])
+        self.state[1] = np.min([np.max([self.state[1] + (returns_at_1 - rented_at_1), 0]), 20])
 
-        print('state after customer actions', self.state)
+        # print('state after customer actions', self.state)
         # import ipdb; ipdb.set_trace()
         return (rented_at_0 + rented_at_1)*self.rental_profit
 
     def step(self, action):
-        day_profit = self.customer_actions()
         moving_costs = self.take_action(action)
+        day_profit = self.customer_actions()
         reward = int(day_profit - moving_costs)
         obs = self.get_state()
         if (obs == np.array([0, 0])).all():
@@ -60,7 +59,7 @@ class CarBusiness(gym.Env):
         else:
             end = False
 
-        print('obs', obs)
+        # print('obs', obs)
         return obs, reward, end, {}
 
     def get_state(self):
@@ -68,13 +67,16 @@ class CarBusiness(gym.Env):
 
     def take_action(self, action):
         real_action = self.disc_to_real_converter[action]
-        print('taking action', real_action)
-        print('state before action', self.state)
+        transport_costs = abs(real_action) * self.transport_cost
+        # print('taking action', real_action)
+        # print('state before action', self.state)
         a = np.min([np.max([0, self.state[0] + real_action]), 20])
         b = np.min([np.max([0, self.state[1] - real_action]), 20])
         self.state = np.array([a , b])
-        print('state after action', self.state)
-        return abs(real_action)*self.transport_cost
+        # print('state after action', self.state)
+        # print('real action', real_action)
+        # print('transport costs',transport_costs )
+        return transport_costs
 
 
 

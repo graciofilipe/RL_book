@@ -6,7 +6,7 @@ This example shows:
 You can visualize experiment results in ~/ray_results using TensorBoard.
 """
 import numpy as np
-from car_business import CarBusiness
+from track import Track
 from ray.rllib.utils import try_import_tf
 
 tf = try_import_tf()
@@ -31,16 +31,14 @@ if __name__ == "__main__":
     config['gamma'] = 0.9
     config['num_workers'] = 6
     config['env_config'] = {
-        'rental_profit': 10,
-        'transport_cost': 2,
-        'lambda_requests_0': 3,
-        'lambda_requests_1': 4,
-        'lambda_returns_0': 3,
-        'lambda_returns_1': 2,
-        'initial_state': np.array([10, 10])
+        'end_locations': [
+            np.array([9, 40]), np.array([9, 39]), np.array([9, 38]), np.array([9, 37]),
+        ],
+        'initial_state': (np.array([4, 0]), np.array([0, 0])),
+        'max_speed': 5
     }
 
-    trainer = ppo.PPOTrainer(config=config, env=CarBusiness)
+    trainer = ppo.PPOTrainer(config=config, env=Track)
 
     # Can optionally call trainer.restore(path) to load a checkpoint.
 
@@ -52,11 +50,11 @@ if __name__ == "__main__":
         # if i % 50 == 0:
         #     checkpoint = trainer.save()
         #     print("checkpoint saved at", checkpoint)
-    zerozero = [trainer.compute_action(np.array([10, 10])) for _ in range(10000)]
-    ntzero = [trainer.compute_action(np.array([19, 0])) for _ in range(10000)]
-    zeront = [trainer.compute_action(np.array([0, 19])) for _ in range(10000)]
-    from collections import Counter
-    print(Counter(zerozero))
-    print(Counter(ntzero))
-    print(Counter(zeront))
+    # zerozero = [trainer.compute_action(np.array([10, 10])) for _ in range(10000)]
+    # ntzero = [trainer.compute_action(np.array([19, 0])) for _ in range(10000)]
+    # zeront = [trainer.compute_action(np.array([0, 19])) for _ in range(10000)]
+    # from collections import Counter
+    # print(Counter(zerozero))
+    # print(Counter(ntzero))
+    # print(Counter(zeront))
     import ipdb; ipdb.set_trace()
