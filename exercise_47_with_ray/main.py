@@ -29,7 +29,7 @@ if __name__ == "__main__":
                        'grayscale': False, 'zero_mean': True, 'custom_preprocessor': None, 'custom_model': None,
                        'custom_action_dist': None, 'custom_options': {}}
     config['gamma'] = 0.9
-    config['num_workers'] = 6
+    config['num_workers'] = 1
     config['env_config'] = {
         'rental_profit': 10,
         'transport_cost': 2,
