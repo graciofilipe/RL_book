@@ -20,8 +20,8 @@ n_episodes = len(episode_actions)
 # save in batches
 for episode_idx in range(n_episodes):
     obs = np.array([0, 0, 0])
-    prev_action = 4
-    prev_reward = 0
+    prev_action = None
+    prev_reward = None
     done = False
     t = 0
     episode_len = len(episode_states[episode_idx])
@@ -31,7 +31,10 @@ for episode_idx in range(n_episodes):
         action = action_to_int_converter[episode_actions[episode_idx][t]]
         new_obs = np.array(episode_states[episode_idx][t+1])
         rew = -1
-        done = False
+        if t == episode_len-2:
+            done=True
+        else:
+            False
         info = {}
 
         batch_builder.add_values(
