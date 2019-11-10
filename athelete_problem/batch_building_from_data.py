@@ -26,15 +26,14 @@ for episode_idx in range(n_episodes):
     t = 0
     episode_len = len(episode_states[episode_idx])
     while t < episode_len-1:
-        # import ipdb;
-        # ipdb.set_trace()
         action = action_to_int_converter[episode_actions[episode_idx][t]]
         new_obs = np.array(episode_states[episode_idx][t+1])
         rew = -1
         if t == episode_len-2:
             done=True
+            print('end of episode', episode_idx, 'at time', t)
         else:
-            False
+            done=False
         info = {}
 
         batch_builder.add_values(
