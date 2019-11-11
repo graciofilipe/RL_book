@@ -3,9 +3,8 @@ import numpy as np
 from data_generation import get_next_state_from_action
 from ray.rllib.agents.dqn import DEFAULT_CONFIG
 from ray.rllib.agents.dqn import DQNTrainer
-from ray.rllib.offline.json_reader import JsonReader
-from ray.rllib.offline.wis_estimator import WeightedImportanceSamplingEstimator
-
+import ray
+ray.init()
 actions = ['strength_1', 'strength_2', 'flexibility_1', 'flexibility_2', 'rest']
 int_to_action_converter = {i: actions[i] for i in range(len(actions))}
 
@@ -29,20 +28,26 @@ class Coach(gym.Env):
 config = DEFAULT_CONFIG
 for k, v in config.items():
     print(k, v)
-config['model'] = {'conv_filters': None, 'conv_activation': 'relu', 'fcnet_activation': 'tanh', 'fcnet_hiddens': [3,3],
- 'free_log_std': False, 'no_final_linear': False, 'vf_share_layers': True, 'use_lstm': False, 'max_seq_len': 20,
- 'lstm_cell_size': 0, 'lstm_use_prev_action_reward': False, 'state_shape': None, 'framestack': True, 'dim': 84,
- 'grayscale': False, 'zero_mean': True, 'custom_preprocessor': None, 'custom_model': None, 'custom_action_dist': None,
- 'custom_options': {}}
+config['model'] = {'conv_filters': None, 'conv_activation': 'relu', 'fcnet_activation': 'tanh', 'fcnet_hiddens': [12, 12, 12],
+                   'free_log_std': False, 'no_final_linear': False, 'vf_share_layers': True, 'use_lstm': False,
+                   'max_seq_len': 20,
+                   'lstm_cell_size': 0, 'lstm_use_prev_action_reward': False, 'state_shape': None, 'framestack': True,
+                   'dim': 0,
+                   'grayscale': False, 'zero_mean': False, 'custom_preprocessor': None, 'custom_model': None,
+                   'custom_action_dist': None,
+                   'custom_options': {}}
 config['input'] = "/Users/filipe.gracio/projects/RL_book/athelete_problem/output/"
-config['input_evaluation'] = []
+config['input_evaluation'] = ['wis']
 config['exploration_final_eps'] = 0
 config['exploration_fraction'] = 0
 config['soft_q'] = True
 config['softmax_temp'] = 1.0
+config['num_workers'] = 1
+
 
 trainer = DQNTrainer(config=config, env=Coach)
 trainer.train()
+
 
 # estimator = WeightedImportanceSamplingEstimator(trainer.get_policy(), gamma=0.9)
 # reader = JsonReader("/Users/filipe.gracio/projects/RL_book/athelete_problem/output-2019-11-05_09-25-44_worker-0_0.json")
@@ -74,6 +79,7 @@ def simulate_episode(trainer, initial_state):
     print('learned to reached goal in', i, 'steps')
     return list_of_states, list_of_actions
 
+
 # def simulate_episode_2(estimator, initial_state):
 #     list_of_states = [initial_state]
 #     list_of_actions = []
@@ -95,4 +101,6 @@ def simulate_episode(trainer, initial_state):
 
 # episode_states, episode_actions = simulate_episode_2(estimator, np.array([0, 0, 0]))
 episode_states, episode_actions = simulate_episode(trainer, np.array([0, 0, 0]))
-import ipdb; ipdb.set_trace()
+import ipdb;
+
+ipdb.set_trace()
