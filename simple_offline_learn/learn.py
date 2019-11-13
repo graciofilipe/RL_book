@@ -24,7 +24,7 @@ config = DEFAULT_CONFIG
 for k, v in config.items():
     print(k, v)
 
-# config['hiddens'] = [2]
+config['hiddens'] = [2]
 config['num_workers'] = 1
 config['model'] = {'conv_filters': None, 'conv_activation': 'relu', 'fcnet_activation': 'relu', 'fcnet_hiddens': [1],
                    'free_log_std': False, 'no_final_linear': False, 'vf_share_layers': True, 'use_lstm': False,
@@ -33,14 +33,16 @@ config['model'] = {'conv_filters': None, 'conv_activation': 'relu', 'fcnet_activ
                    'custom_preprocessor': None, 'custom_model': None, 'custom_action_dist': None, 'custom_options': {}}
 config['input'] = "/Users/filipe.gracio/projects/RL_book/simple_offline_learn/output/"
 config['input_evaluation'] = []
-# config['exploration_final_eps'] = 0
-# config['exploration_fraction'] = 0
-# config['soft_q'] = True
-# config['softmax_temp'] = 1.0
-# config['lr'] = 0.1
+config['exploration_final_eps'] = 0
+config['exploration_fraction'] = 0
+config['soft_q'] = True
+config['softmax_temp'] = 1.0
+config['lr'] = 0.1
 
 trainer = DQNTrainer(config=config, env=Coach)
-trainer.train()
+for _ in range(11):
+    print(_)
+    trainer.train()
 
 def is_state_final(state):
     return state == np.array([5])
@@ -62,7 +64,7 @@ def simulate_episode(trainer, initial_state):
         # print('state', state)
         action = trainer.compute_action(state)
         next_state = get_next_state_from_action(state, action)
-        print('state:', state, '  best_action:', action, '  next_state:', next_state, '    for time', i)
+        # print('state:', state, '  best_action:', action, '  next_state:', next_state, '    for time', i)
         list_of_actions.append(action)
         list_of_states.append(next_state)
         state = next_state
@@ -72,7 +74,7 @@ def simulate_episode(trainer, initial_state):
 
 # import ipdb; ipdb.set_trace()
 episode_len_ls = []
-for i in range(3):
+for i in range(66):
     episode_states, episode_actions = simulate_episode(trainer, np.array([0]))
     episode_len_ls.append(len(episode_actions))
 

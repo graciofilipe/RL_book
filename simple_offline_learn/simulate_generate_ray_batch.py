@@ -9,7 +9,7 @@ writer = JsonWriter("")
 episode_lens_ls = []
 action_mapper = {0:-1, 1:1}
 width = np.array(5)
-n_episodes = 6
+n_episodes = 6666
 # simulate in batches
 for episode_idx in range(n_episodes):
     obs = np.array([0])
@@ -24,8 +24,8 @@ for episode_idx in range(n_episodes):
         new_obs =  obs + action_mapper[action]
         if new_obs < -5:
             new_obs = np.array([-5])
-            print('capping')
-        print('new_obs', new_obs, 'of type', type(new_obs))
+            # print('capping')
+        # print('new_obs', new_obs, 'of type', type(new_obs))
         # print('\n')
         if new_obs == width:
             done=True
@@ -42,7 +42,7 @@ for episode_idx in range(n_episodes):
             obs=obs,
             actions=action,
             action_prob=1.0,  # put the true action probability here
-            rewards=-1,
+            rewards=-1*t,
             prev_actions=prev_action,
             prev_rewards=prev_reward,
             dones=done,
