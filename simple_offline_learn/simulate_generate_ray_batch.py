@@ -8,8 +8,8 @@ batch_builder = SampleBatchBuilder()  # or MultiAgentSampleBatchBuilder
 writer = JsonWriter("")
 episode_lens_ls = []
 action_mapper = {0:-1, 1:1}
-width = 5
-n_episodes = 10000
+width = np.array(5)
+n_episodes = 6
 # simulate in batches
 for episode_idx in range(n_episodes):
     obs = np.array([0])
@@ -21,10 +21,12 @@ for episode_idx in range(n_episodes):
         # print('obs', obs)
         action = random.choice([0, 1])
         # print('actions', action)
-        new_obs = np.max([-width, obs + action_mapper[action]])
-        # print('new_obs', new_obs)
+        new_obs =  obs + action_mapper[action]
+        if new_obs < -5:
+            new_obs = np.array([-5])
+            print('capping')
+        print('new_obs', new_obs, 'of type', type(new_obs))
         # print('\n')
-        rew=-1
         if new_obs == width:
             done=True
             # print('end of episode', episode_idx, 'at time', t)
@@ -40,7 +42,7 @@ for episode_idx in range(n_episodes):
             obs=obs,
             actions=action,
             action_prob=1.0,  # put the true action probability here
-            rewards=rew,
+            rewards=-1,
             prev_actions=prev_action,
             prev_rewards=prev_reward,
             dones=done,
@@ -48,7 +50,7 @@ for episode_idx in range(n_episodes):
             new_obs=new_obs)
         obs = new_obs
         prev_action = action
-        prev_reward = rew
+        prev_reward = -1
         t += 1
     writer.write(batch_builder.build_and_reset())
 
