@@ -138,4 +138,4 @@ def generate_data(n_trajectories):
     x=1
 
 if __name__ == '__main__':
-    generate_data(10000)
+    generate_data(60000)

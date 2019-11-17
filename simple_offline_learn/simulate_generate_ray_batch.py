@@ -9,7 +9,7 @@ writer = JsonWriter("")
 episode_lens_ls = []
 action_mapper = {0:-1, 1:1}
 width = np.array(5)
-n_episodes = 6666
+n_episodes = 8888
 # simulate in batches
 for episode_idx in range(n_episodes):
     obs = np.array([0])
@@ -33,8 +33,6 @@ for episode_idx in range(n_episodes):
             episode_lens_ls.append(t)
         else:
             done=False
-        info = {}
-
         batch_builder.add_values(
             t=t,
             eps_id=episode_idx,
@@ -46,7 +44,7 @@ for episode_idx in range(n_episodes):
             prev_actions=prev_action,
             prev_rewards=prev_reward,
             dones=done,
-            infos=info,
+            infos={},
             new_obs=new_obs)
         obs = new_obs
         prev_action = action
