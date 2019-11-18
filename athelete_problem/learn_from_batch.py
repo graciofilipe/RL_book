@@ -49,10 +49,10 @@ for k, v in config.items():
 
 # config['batch_mode'] = 'complete_episodes'
 config['hiddens'] = []
-# config['n_step'] = 3
+config['n_step'] = 10
 config['num_workers'] = 4
 config['input'] = "/Users/filipe.gracio/projects/RL_book/athelete_problem/output/"
-config['input_evaluation'] = []
+config['input_evaluation'] = ['wis']
 config["evaluation_config"] = {
     'exploration_final_eps': 0,
     'exploration_fraction': 0.1}
@@ -61,8 +61,8 @@ config["evaluation_config"] = {
 config['soft_q'] = True
 # config['softmax_temp'] = 1
 # config['lr'] = 0.005
-config['learning_starts'] = 10
-config['train_batch_size'] = 6666
+config['learning_starts'] = 100
+config['train_batch_size'] = 32
 # config['output'] = 'logdir'
 config['env'] = Coach
 config["dueling"] = True
@@ -72,7 +72,7 @@ config["sigma0"] = 0.5
 config['model'] = {'conv_filters': None,
                    'conv_activation': 'relu',
                    'fcnet_activation': 'tanh',
-                   'fcnet_hiddens': [3,3],
+                   'fcnet_hiddens': [3, 3],
                    'free_log_std': False,
                    'no_final_linear': False,
                    'vf_share_layers': True,
@@ -100,7 +100,7 @@ config['model'] = {'conv_filters': None,
 
 #### training #####
 trainer = DQNTrainer(config=config, env=Coach)
-for i in range(88):
+for i in range(6666):
     print('train iteration', i)
     trainer.train()
 ###################
